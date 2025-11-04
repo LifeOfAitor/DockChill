@@ -59,6 +59,10 @@ Gainera, ezkerreko panelean Pomodoro tenporizadore minimalista eta eskuineko pan
 
 Proiektu hau ikasketa- eta esperimentazio-helburuetarako sortua da, Android garapena eta Kotlin praktikan jartzeko.
 
+## Ikonoak
+
+https://github.com/Makin-Things/weather-icons
+
 ---
 
 ## 📄 Lizentzia
