@@ -46,6 +46,7 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation("androidx.viewpager2:viewpager2:1.1.0")
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.play.services.location)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

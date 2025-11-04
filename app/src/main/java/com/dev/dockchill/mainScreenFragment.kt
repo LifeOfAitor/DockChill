@@ -25,6 +25,7 @@ class mainScreenFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         orduaErakutsi()
+        ezarriEguraldia()
     }
 
     private fun orduaErakutsi(){
@@ -35,6 +36,10 @@ class mainScreenFragment : Fragment() {
 
         val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         binding.dateText.text = dateFormat.format(now)
+    }
+
+    private fun ezarriEguraldia(){
+        return
     }
 
 }
