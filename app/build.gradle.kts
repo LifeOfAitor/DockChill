@@ -44,7 +44,13 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
+    //fragmentuekin lan egiteko lehio ezberdinetan
     implementation("androidx.viewpager2:viewpager2:1.1.0")
+    //apirekin lan egiteko
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")
+
     implementation(libs.androidx.constraintlayout)
     implementation(libs.play.services.location)
     testImplementation(libs.junit)

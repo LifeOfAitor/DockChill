@@ -55,8 +55,12 @@ class MainScreenFragment : Fragment() {
 
     @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
     private fun getLocation() {
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-            == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+            == PackageManager.PERMISSION_GRANTED
+        ) {
 
             // baimenik badu...
             weather.getGpsLocation { location ->
@@ -65,7 +69,10 @@ class MainScreenFragment : Fragment() {
 
         } else {
             // bestela eskatu baimenak
-            requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
+            requestPermissions(
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                LOCATION_PERMISSION_REQUEST_CODE
+            )
         }
     }
 
@@ -75,7 +82,29 @@ class MainScreenFragment : Fragment() {
             val lon = location.longitude
             Toast.makeText(requireContext(), "Lat: $lat, Lon: $lon", Toast.LENGTH_SHORT).show()
 
-            weather.getapidata(lat, lon)
+            weather.getWeatherData(lat, lon) { result ->
+                if (result != null) {
+                    //GAUR
+                    val temp = result.current.temp_c
+                    val condition = result.current.condition.text
+
+                    //Honek egiten duena da denbora errealean datuak eguneratu
+                    activity?.runOnUiThread {
+                        binding.weatherCard.gaurTemperatureText.text = "$temp°C"
+                        binding.weatherCard.gaurWeatherDescription.text = "$condition"
+                    }
+
+                    // BIHAR
+                    val forecastTomorrow = result.forecast.forecastday[1].day
+                    val tempTomorrow = forecastTomorrow.avgtemp_c
+                    val conditionTomorrow = forecastTomorrow.condition.text
+
+                    activity?.runOnUiThread {
+                        binding.weatherCard.biharTemperatureText.text = "$tempTomorrow°C"
+                        binding.weatherCard.biharWeatherDescription.text = "$conditionTomorrow"
+                    }
+                }
+            }
         } else {
             Toast.makeText(requireContext(), "Ezin izan da lortu GPS", Toast.LENGTH_SHORT).show()
             binding.weatherCard.gaurTemperatureText.setText("Error °C")

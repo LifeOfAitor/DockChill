@@ -8,7 +8,23 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import android.util.Log
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.GET
+import retrofit2.http.Query
+import java.io.IOException
 
+
+/**
+ * Klase nagusia non eguraldia lortzen duen WeatherAPIren APIa erabiliz
+ *  Irakurtzen du API klabea .txt fitxategitik
+ *  Retrofit instantzia sortu
+ *  HTTP eskaera egin
+ *  interfazean erabiltzeko datuak bueltatu
+ */
 
 class Weather(private val context: Context) {
 
@@ -16,6 +32,79 @@ class Weather(private val context: Context) {
     // baimenak ematea GPS erabiltzeko
     private val fusedLocationClient: FusedLocationProviderClient =
         LocationServices.getFusedLocationProviderClient(context)
+
+    interface WeatherApi {
+        @GET("v1/forecast.json")
+        suspend fun getForecast(
+            @Query("key") key: String,
+            @Query("q") query: String,
+            @Query("days") days: Int = 2,
+            @Query("aqi") aqi: String = "no",
+            @Query("alerts") alerts: String = "no"
+        ): WeatherResponse
+    }
+    data class WeatherResponse(
+        val current: CurrentData,
+        val forecast: ForecastData
+    )
+    data class CurrentData(
+        val temp_c: Double,     // Temperatura actual en ºC
+        val condition: ConditionData  // Estado del cielo (nublado, soleado, etc.)
+    )
+    data class ConditionData(
+        val text: String
+    )
+    data class ForecastData(
+        val forecastday: List<ForecastDayData>
+    )
+
+    data class ForecastDayData(
+        val day: DayData
+    )
+
+    data class DayData(
+        val avgtemp_c: Double,
+        val condition: ConditionData
+    )
+
+    private fun createRetrofit(): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl("https://api.weatherapi.com/")
+            .addConverterFactory(GsonConverterFactory.create()) // Cautomatikoki JSON => Kotlin
+            .build()
+    }
+
+    fun getWeatherData(lat: Double, lon: Double, onResult: (WeatherResponse?) -> Unit) {
+        val apiKey = getapiKey()
+        if (apiKey.isEmpty()) {
+            Log.e("Weather", "API key not found!")
+            onResult(null)
+            return
+        }
+
+        val retrofit = createRetrofit()
+        val service = retrofit.create(WeatherApi::class.java)
+
+        // Ejecutamos la petición en un hilo de entrada/salida (IO)
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = service.getForecast(apiKey, "$lat,$lon")
+
+                // Mostramos por consola algunos datos (útil para depurar)
+                Log.d("Weather", "Temp actual: ${response.current.temp_c}°C")
+                Log.d("Weather", "Cielo: ${response.current.condition.text}")
+                Log.d("Weather", "Mañana temeratura media: ${response.forecast.forecastday[1].day.avgtemp_c}°C")
+                Log.d("Weather", "Cielo: ${response.forecast.forecastday[1].day.condition.text}")
+
+                // Llamamos al callback con el resultado
+                onResult(response)
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+                onResult(null)
+            }
+        }
+    }
 
     @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
     fun getGpsLocation(onLocationReceived: (Location?) -> Unit) {
@@ -33,7 +122,7 @@ class Weather(private val context: Context) {
     fun getapidata(lat: Double, lon: Double) {
         val apikey=getapiKey()
         val url = "https://api.weatherapi.com/v1/forecast.json?key=$apikey&q=$lat,$lon&days=2&aqi=no&alerts=no"
-        Log.d("aitor", url)
+        //Log.d("aitor", url) ongi funtzionatzen du printzipioz
     }
     fun getapiKey(): String {
         return try {
