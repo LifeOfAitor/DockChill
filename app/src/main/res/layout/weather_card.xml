@@ -86,7 +86,7 @@
                     android:textStyle="bold"/>
 
                 <TextView
-                    android:id="@+id/temperature_text"
+                    android:id="@+id/bihar_temperature_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="20°C"
@@ -94,7 +94,7 @@
                     android:textStyle="bold"/>
 
                 <TextView
-                    android:id="@+id/weather_description"
+                    android:id="@+id/bihar_weather_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Eguzkitsua"

@@ -78,6 +78,10 @@ class MainScreenFragment : Fragment() {
             weather.getapidata(lat, lon)
         } else {
             Toast.makeText(requireContext(), "Ezin izan da lortu GPS", Toast.LENGTH_SHORT).show()
+            binding.weatherCard.gaurTemperatureText.setText("Error °C")
+            binding.weatherCard.gaurWeatherDescription.setText("Error")
+            binding.weatherCard.biharTemperatureText.setText("Error °C")
+            binding.weatherCard.biharWeatherDescription.setText("Error")
         }
     }
 }
