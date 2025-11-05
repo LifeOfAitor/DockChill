@@ -3,27 +3,30 @@ package com.dev.dockchill
 import android.Manifest
 import android.content.Context
 import android.location.Location
-import android.location.LocationManager
-import android.location.LocationRequest
 import androidx.annotation.RequiresPermission
-import androidx.core.content.ContextCompat.getSystemService
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationSettingsRequest
+import com.google.android.gms.location.LocationServices
 
 
-class Weather {
+class Weather(private val context: Context) {
 
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private fun getapidata() {
-
-    }
+    // erabiliko da hau lortzeko GPS lokalizazioa, beharko dira erabilytzailearen partetik
+    // baimenak ematea GPS erabiltzeko
+    private val fusedLocationClient: FusedLocationProviderClient =
+        LocationServices.getFusedLocationProviderClient(context)
 
     @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
-    private fun getgpslocation() {
+    fun getGpsLocation(onLocationReceived: (Location?) -> Unit) {
         fusedLocationClient.lastLocation
             .addOnSuccessListener { location: Location? ->
-                // Got last known location. In some rare situations this can be null.
+                onLocationReceived(location)
+            }
+            .addOnFailureListener { exception ->
+                exception.printStackTrace()
+                onLocationReceived(null)
             }
     }
+    fun getapidata(lat: Double, lon: Double) { }
 }
+
 

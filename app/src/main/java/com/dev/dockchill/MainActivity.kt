@@ -10,7 +10,6 @@ import com.dev.dockchill.databinding.ActivityMainBinding
 import com.google.android.material.tabs.TabLayoutMediator
 
 class MainActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,13 +26,15 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    // fragmentak slider bezala funtzionatu dezaten eta fragmentak sortzeko gure MainActivity honetan
     private inner class ScreenSlidePagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
         override fun getItemCount(): Int = 3
 
+        //fragmentak sortu eta ezarri
         override fun createFragment(position: Int): Fragment {
             return when (position) {
                 0 -> pomodoroFragment()
-                1 -> mainScreenFragment()
+                1 -> MainScreenFragment()
                 else -> todo_listFragment()
             }
         }
