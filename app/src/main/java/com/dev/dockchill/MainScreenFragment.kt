@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -80,10 +81,13 @@ class MainScreenFragment : Fragment() {
         if (location != null) {
             val lat = location.latitude
             val lon = location.longitude
-            Toast.makeText(requireContext(), "Lat: $lat, Lon: $lon", Toast.LENGTH_SHORT).show()
 
             weather.getWeatherData(lat, lon) { result ->
                 if (result != null) {
+                    val code = result.current.condition.code
+                    val biharcode = result.forecast.forecastday[1].day.condition.code
+                    val info = weatherMap[code]
+
                     //GAUR
                     val temp = result.current.temp_c
                     val condition = result.current.condition.text
@@ -91,7 +95,8 @@ class MainScreenFragment : Fragment() {
                     //Honek egiten duena da denbora errealean datuak eguneratu
                     activity?.runOnUiThread {
                         binding.weatherCard.gaurTemperatureText.text = "$temp°C"
-                        binding.weatherCard.gaurWeatherDescription.text = "$condition"
+                        binding.weatherCard.gaurWeatherDescription.text = info?.descriptionEus ?: condition
+                        info?.let { binding.weatherCard.gaurWeatherIcon.setImageResource(it.iconRes) }
                     }
 
                     // BIHAR
@@ -101,16 +106,20 @@ class MainScreenFragment : Fragment() {
 
                     activity?.runOnUiThread {
                         binding.weatherCard.biharTemperatureText.text = "$tempTomorrow°C"
-                        binding.weatherCard.biharWeatherDescription.text = "$conditionTomorrow"
+                        binding.weatherCard.biharWeatherDescription.text = info?.descriptionEus ?: conditionTomorrow
+                        info?.let { binding.weatherCard.biharWeatherIcon.setImageResource(it.iconRes) }
+
                     }
+                }else{
+                    Log.e("aitor", "WeatherResponse nulo")
                 }
             }
         } else {
             Toast.makeText(requireContext(), "Ezin izan da lortu GPS", Toast.LENGTH_SHORT).show()
-            binding.weatherCard.gaurTemperatureText.setText("Error °C")
-            binding.weatherCard.gaurWeatherDescription.setText("Error")
-            binding.weatherCard.biharTemperatureText.setText("Error °C")
-            binding.weatherCard.biharWeatherDescription.setText("Error")
+            binding.weatherCard.gaurTemperatureText.text = "Error °C"
+            binding.weatherCard.gaurWeatherDescription.text = "Error"
+            binding.weatherCard.biharTemperatureText.text = "Error °C"
+            binding.weatherCard.biharWeatherDescription.text = "Error"
         }
     }
 }

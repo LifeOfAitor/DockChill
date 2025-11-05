@@ -28,7 +28,7 @@ import java.io.IOException
 
 class Weather(private val context: Context) {
 
-    // erabiliko da hau lortzeko GPS lokalizazioa, beharko dira erabilytzailearen partetik
+    // erabiliko da hau lortzeko GPS lokalizazioa, beharko dira erabiltzailearen partetik
     // baimenak ematea GPS erabiltzeko
     private val fusedLocationClient: FusedLocationProviderClient =
         LocationServices.getFusedLocationProviderClient(context)
@@ -48,11 +48,12 @@ class Weather(private val context: Context) {
         val forecast: ForecastData
     )
     data class CurrentData(
-        val temp_c: Double,     // Temperatura actual en ºC
-        val condition: ConditionData  // Estado del cielo (nublado, soleado, etc.)
+        val temp_c: Double,
+        val condition: ConditionData
     )
     data class ConditionData(
-        val text: String
+        val text: String,
+        val code: Int
     )
     data class ForecastData(
         val forecastday: List<ForecastDayData>
@@ -89,12 +90,6 @@ class Weather(private val context: Context) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val response = service.getForecast(apiKey, "$lat,$lon")
-
-                // Mostramos por consola algunos datos (útil para depurar)
-                Log.d("Weather", "Temp actual: ${response.current.temp_c}°C")
-                Log.d("Weather", "Cielo: ${response.current.condition.text}")
-                Log.d("Weather", "Mañana temeratura media: ${response.forecast.forecastday[1].day.avgtemp_c}°C")
-                Log.d("Weather", "Cielo: ${response.forecast.forecastday[1].day.condition.text}")
 
                 // Llamamos al callback con el resultado
                 onResult(response)
