@@ -19,6 +19,7 @@
 
         <TextView
             android:id="@+id/time_text"
+            android:textColor="@color/md_theme_onBackground_mediumContrast"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-light"
@@ -29,11 +30,12 @@
 
         <TextView
             android:id="@+id/date_text"
+            android:textColor="@color/md_theme_onBackground_mediumContrast"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:fontFamily="sans-serif"
-            android:textSize="18sp"
+            android:textSize="24sp"
             tools:text="16/10/2025" />
 
     </LinearLayout>
