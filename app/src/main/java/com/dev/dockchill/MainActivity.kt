@@ -24,6 +24,9 @@ class MainActivity : AppCompatActivity() {
         TabLayoutMediator(binding.tabLayout, binding.pager) { _, _ ->
         }.attach()
 
+        // kargatuko du defektuz "1" posizioan dagoen fragmentua
+        binding.pager.currentItem = 1
+
     }
 
     // fragmentak slider bezala funtzionatu dezaten eta fragmentak sortzeko gure MainActivity honetan

@@ -16,6 +16,10 @@ import com.dev.dockchill.databinding.FragmentMainScreenBinding
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 
 class MainScreenFragment : Fragment() {
 
@@ -38,11 +42,32 @@ class MainScreenFragment : Fragment() {
         return binding.root
     }
 
+    @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
     override fun onResume() {
         super.onResume()
-        // Fragment-a berriz bistaratzean ordua eta data eguneratu
-        showDateTime()
+
+        // Coroutine bat abiarazten dugu fragment bizi den bitartean (lifecycleScope)
+        lifecycleScope.launch {
+            var azkenEguraldiEguneratzea = 0L // Azken eguraldi eguneratzearen denbora (timestamp)
+
+            while (isActive) {
+                val orain = System.currentTimeMillis()
+
+                // 5 segunduro exekutatzen da, beraz ordua eta data fresko mantentzen dira
+                showDateTime()
+
+                // Energia aurrezteko ez dugu gehiegi exekutatu nahi GPS eta API deia
+                if (orain - azkenEguraldiEguneratzea > 300000) { // 300.000 ms = 5 minutu
+                    getLocation()
+                    azkenEguraldiEguneratzea = orain
+                }
+
+                // 5 segunduro berriro bueltatu buklora
+                delay(5000)
+            }
+        }
     }
+
 
     @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
