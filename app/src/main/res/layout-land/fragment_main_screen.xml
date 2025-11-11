@@ -1,30 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".MainScreenFragment"
     tools:ignore="MissingDefaultResource">
 
     <LinearLayout
         android:id="@+id/time_date_container"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/time_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-light"
-            android:textSize="120sp"
-            android:letterSpacing="0.4"
+            android:letterSpacing="0.02"
+            android:textSize="100sp"
             android:textStyle="bold"
             tools:text="12:45" />
 
@@ -32,49 +31,46 @@
             android:id="@+id/date_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="4dp"
             android:fontFamily="sans-serif"
             android:textSize="18sp"
             tools:text="16/10/2025" />
 
     </LinearLayout>
 
-    <LinearLayout
+
+    <FrameLayout
+        android:id="@+id/weather_card_container"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:orientation="horizontal"
-        android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@+id/time_date_container"
+        android:layout_height="180dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginBottom="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/music_card_container"
+        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        tools:ignore="UselessParent">
 
-        <FrameLayout
-            android:id="@+id/weather_card_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp">
+        <include
+            android:id="@+id/weather_card"
+            layout="@layout/weather_card" />
+    </FrameLayout>
 
-            <include
-                android:id="@+id/weather_card"
-                layout="@layout/weather_card"/>
+    <FrameLayout
+        android:id="@+id/music_card_container"
+        android:layout_width="0dp"
+        android:layout_height="180dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="25dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/weather_card_container"
+        tools:ignore="UselessParent">
 
-        </FrameLayout>
+        <include
+            android:id="@+id/music_card"
+            layout="@layout/music_player_card" />
 
-        <FrameLayout
-            android:id="@+id/second_card_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:layout_marginStart="8dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Segunda Tarjeta aquí"
-                android:layout_gravity="center"/>
-        </FrameLayout>
-
-    </LinearLayout>
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,22 +11,7 @@
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/pager"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/tab_layout"
+        android:layout_height="match_parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tab_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginBottom="3dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:tabBackground="@null"
-        app:tabIndicatorColor="@color/md_theme_onBackground"
-        app:tabIndicatorHeight="2dp"
-        app:tabIndicatorGravity="bottom"
-        app:tabMode="fixed"
-        app:tabRippleColor="@null" />
 </androidx.constraintlayout.widget.ConstraintLayout>
