@@ -59,9 +59,66 @@ Gainera, ezkerreko panelean Pomodoro tenporizadore minimalista eta eskuineko pan
 
 Proiektu hau ikasketa- eta esperimentazio-helburuetarako sortua da, Android garapena eta Kotlin praktikan jartzeko.
 
-## Ikonoak
+## 🌐 Baliabideak
 
-https://github.com/Makin-Things/weather-icons
+- [Weather Icons](https://github.com/Makin-Things/weather-icons)
+- [WeatherAPI](https://www.weatherapi.com/)
+
+**API erantzunaren adibidea nolako datuak lortzen dituen ikusteko:**
+
+``` json
+{
+    "location": {
+        "name": "Irun",
+        "region": "Pais Vasco",
+        "country": "Spain",
+        "lat": 43.35,
+        "lon": -1.7833,
+        "tz_id": "Europe/Paris",
+        "localtime_epoch": 1762848560,
+        "localtime": "2025-11-11 09:09"
+    },
+    "current": {
+        "last_updated_epoch": 1762848000,
+        "last_updated": "2025-11-11 09:00",
+        "temp_c": 17.1,
+        "temp_f": 62.8,
+        "is_day": 1,
+        "condition": {
+            "text": "Sunny",
+            "icon": "//cdn.weatherapi.com/weather/64x64/day/113.png",
+            "code": 1000
+        },
+        "wind_mph": 10.5,
+        "wind_kph": 16.9,
+        "wind_degree": 169,
+        "wind_dir": "S",
+        "pressure_mb": 1012.0,
+        "pressure_in": 29.88,
+        "precip_mm": 0.0,
+        "precip_in": 0.0,
+        "humidity": 59,
+        "cloud": 0,
+        "feelslike_c": 17.1,
+        "feelslike_f": 62.8,
+        "windchill_c": 9.7,
+        "windchill_f": 49.5,
+        "heatindex_c": 11.6,
+        "heatindex_f": 52.9,
+        "dewpoint_c": 7.0,
+        "dewpoint_f": 44.5,
+        "vis_km": 10.0,
+        "vis_miles": 6.0,
+        "uv": 0.1,
+        "gust_mph": 22.1,
+        "gust_kph": 35.5,
+        "short_rad": 20.86,
+        "diff_rad": 9.77,
+        "dni": 0.0,
+        "gti": 9.01
+    }
+}
+```
 
 ---
 

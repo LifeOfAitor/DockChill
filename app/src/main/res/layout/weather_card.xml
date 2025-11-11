@@ -44,7 +44,7 @@
                     android:id="@+id/gaur_temperature_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="23°C"
+                    android:text="---°C"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
@@ -52,7 +52,7 @@
                     android:id="@+id/gaur_weather_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Lanbroa"
+                    android:text="Datuak kargatzen..."
                     android:textSize="16sp" />
             </LinearLayout>
 
@@ -89,7 +89,7 @@
                     android:id="@+id/bihar_temperature_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="20°C"
+                    android:text="---°C"
                     android:textSize="20sp"
                     android:textStyle="bold"/>
 
@@ -97,7 +97,7 @@
                     android:id="@+id/bihar_weather_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Eguzkitsua"
+                    android:text="Datuak kargatzen..."
                     android:textSize="16sp"/>
 
             </LinearLayout>
