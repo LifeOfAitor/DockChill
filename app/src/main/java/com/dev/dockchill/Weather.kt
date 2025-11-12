@@ -36,6 +36,7 @@ class Weather(private val context: Context) {
         LocationServices.getFusedLocationProviderClient(context)
 
     // Retrofit-en bidez deituko dugu WeatherAPI-ren datuei
+    // retrofit HTTP Bezero bat da API eskaerak egiteko balio duena
     interface WeatherApi {
         @GET("v1/forecast.json")
         suspend fun getForecast(
@@ -76,7 +77,7 @@ class Weather(private val context: Context) {
         val condition: ConditionData
     )
 
-    // hemen lortuko dugu API deia egitea eta datuar Retrofit bidez json batera bidaltzea datuak
+    // hemen lortuko dugu API deia egitea eta datuak Retrofit bidez json batera bidaltzea datuak
     // parseatzeko.
     private fun createRetrofit(): Retrofit {
         return Retrofit.Builder()

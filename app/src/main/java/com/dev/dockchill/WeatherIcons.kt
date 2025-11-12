@@ -1,18 +1,13 @@
 package com.dev.dockchill
 
-import com.dev.dockchill.R
-
 /**
- * Mapea los códigos de WeatherAPI a:
- * - Traducción al euskera
- * - Recurso drawable del icono correspondiente
+ * WeatherAPIren ikonoen eta eguraldiaren egoerari lotzen dion kodigoa kudeatzen da
+ * nik nahi ditudan egoerak eta ikonoak erabiltzeko
  */
 data class WeatherInfo(
     val descriptionEus: String,
     val iconRes: Int
 )
-
-// Mapa de condiciones (WeatherAPI code -> descripción e icono)
 val weatherMap = mapOf(
     1000 to WeatherInfo("Eguzkitsua", R.drawable.clear),
     1003 to WeatherInfo("Hodei batzuk", R.drawable.cloudy_1_day),
