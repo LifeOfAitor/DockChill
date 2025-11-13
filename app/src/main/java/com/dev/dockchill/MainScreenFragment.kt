@@ -1,8 +1,12 @@
 package com.dev.dockchill
 
 import android.Manifest
+import android.content.ComponentName
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
+import android.media.MediaMetadata
+import android.media.session.MediaSessionManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,14 +16,20 @@ import android.widget.Toast
 import androidx.annotation.RequiresPermission
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.dev.dockchill.databinding.FragmentMainScreenBinding
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
 import androidx.lifecycle.lifecycleScope
+import com.dev.dockchill.databinding.FragmentMainScreenBinding
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import android.media.session.MediaController
+import android.media.session.PlaybackState
+import android.os.Build
+import android.provider.Settings
+import android.widget.SeekBar
+import androidx.annotation.RequiresApi
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 class MainScreenFragment : Fragment() {
 
@@ -31,6 +41,48 @@ class MainScreenFragment : Fragment() {
 
     // GPS baimena eskatzeko erabiliko den kodea
     private val LOCATION_PERMISSION_REQUEST_CODE = 100
+
+    // --- Device Music Controller ---
+    private lateinit var mediaSessionManager: MediaSessionManager
+    private var mediaController: MediaController? = null
+    private var seekBarJob: kotlinx.coroutines.Job? = null
+
+    private fun setupSeekBar() {
+        binding.musicCard.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                if (fromUser) {
+                    val duration = mediaController?.metadata?.getLong(MediaMetadata.METADATA_KEY_DURATION) ?: 0
+                    val newPosition = (duration * progress / 100)
+                    mediaController?.transportControls?.seekTo(newPosition)
+                }
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
+    }
+
+    private fun startSeekBarUpdater() {
+        seekBarJob?.cancel()
+        seekBarJob = lifecycleScope.launch {
+            while (isActive) {
+                val controller = mediaController
+                val state = controller?.playbackState
+                val metadata = controller?.metadata
+                if (controller != null && state != null && metadata != null) {
+                    val duration = metadata.getLong(MediaMetadata.METADATA_KEY_DURATION)
+                    val position = state.position
+                    val progress = if (duration > 0) (position * 100 / duration).toInt() else 0
+
+                    activity?.runOnUiThread {
+                        binding.musicCard.seekBar.progress = progress
+                    }
+                }
+                delay(500)
+            }
+        }
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -81,7 +133,83 @@ class MainScreenFragment : Fragment() {
 
         // GPSaren kokapena lortzen saiatuko gara
         getLocation()
+
+        // --- Initialize Device Music Controller ---
+        initMediaController()
+        setupSeekBar()
+        startSeekBarUpdater()
+
+
+        binding.musicCard.btnPlaypause.setOnClickListener {
+            mediaController?.let { controller ->
+                val state = controller.playbackState?.state
+                if (state == PlaybackState.STATE_PLAYING) {
+                    controller.transportControls.pause()
+                } else {
+                    controller.transportControls.play()
+                }
+            }
+        }
+
+        binding.musicCard.btnNext.setOnClickListener {
+            mediaController?.transportControls?.skipToNext()
+        }
     }
+
+    private fun initMediaController() {
+        mediaSessionManager = requireContext().getSystemService(MediaSessionManager::class.java)
+
+        val component = ComponentName(requireContext(), MyNotificationListener::class.java)
+
+        // Load active session
+        updateMediaController()
+
+        // Listen for session changes (if a new app starts playing)
+        mediaSessionManager.getActiveSessions(component)?.let { controllers ->
+            if (controllers.isNotEmpty()) {
+                mediaController = controllers[0]
+                mediaController?.metadata?.let { updateUIFromMetadata(it) }
+                mediaController?.registerCallback(mediaControllerCallback)
+            }
+        }
+    }
+
+    private val mediaControllerCallback = object : MediaController.Callback() {
+        override fun onPlaybackStateChanged(state: PlaybackState?) {
+            startSeekBarUpdater()
+        }
+
+        override fun onMetadataChanged(metadata: MediaMetadata?) {
+            updateUIFromMetadata(metadata)
+            startSeekBarUpdater()
+        }
+    }
+
+
+    private fun updateMediaController() {
+        val controllers = mediaSessionManager.getActiveSessions(
+            ComponentName(requireContext(), MyNotificationListener::class.java)
+        )
+        if (controllers.isNotEmpty()) {
+            mediaController = controllers[0]
+            mediaController?.metadata?.let { updateUIFromMetadata(it) }
+            mediaController?.registerCallback(mediaControllerCallback)
+        } else {
+            Toast.makeText(requireContext(), "No active music session", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun updateUIFromMetadata(metadata: MediaMetadata?) {
+        metadata?.let {
+            activity?.runOnUiThread {
+                val albumArt = it.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART)
+                    ?: it.getBitmap(MediaMetadata.METADATA_KEY_ART)
+                binding.musicCard.songImg.setImageBitmap(albumArt)
+            }
+        }
+    }
+
+
 
     // data eta hordua lortuko dugu hemendik eta binding bidez ezarri fragmentuan
     private fun showDateTime() {
