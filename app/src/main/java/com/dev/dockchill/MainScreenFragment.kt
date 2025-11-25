@@ -42,17 +42,33 @@ class MainScreenFragment : Fragment() {
     // GPS baimena eskatzeko erabiliko den kodea
     private val LOCATION_PERMISSION_REQUEST_CODE = 100
 
-    // --- Device Music Controller ---
+    // MediaSessionManager: gailuan martxan dauden musika aplikazioen MediaSession-ak kontrolatzeko erabiltzen da.
+    // Hau erabilita, Spotify, YouTube Music, etab. bezalako app-en erreprodukzioa kontrolatu dezakezu.
     private lateinit var mediaSessionManager: MediaSessionManager
+
+
+    // MediaController: unean aktibo dagoen musika aplikazioa kontrolatzeko interfazea.
+    // Honek uzten dizu play, pause, next, seek… komandoak bidaltzen.
     private var mediaController: MediaController? = null
+
+    // SeekBar eguneratzen duen coroutine job-a gordeko dugu.
     private var seekBarJob: kotlinx.coroutines.Job? = null
 
+
+    // abestiaren kontrol barra martxan jarriko dugu hemendik. Erabiltzaileak barratik mugitu daiteke
     private fun setupSeekBar() {
-        binding.musicCard.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        // Listener bat jartzen diogu seekBar-ari
+        binding.musicCard.seekBar.setOnSeekBarChangeListener(object :
+            SeekBar.OnSeekBarChangeListener {
+            // Erabiltzaileak barra mugitu duenean
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
-                    val duration = mediaController?.metadata?.getLong(MediaMetadata.METADATA_KEY_DURATION) ?: 0
+                    // Abestiaren iraupena lortzen dugu
+                    val duration =
+                        mediaController?.metadata?.getLong(MediaMetadata.METADATA_KEY_DURATION) ?: 0
+                    // Mugitu dugun proportzioaren arabera posizio berria kalkulatzen dugu
                     val newPosition = (duration * progress / 100)
+                    // Spotify-ri posizio berrira salto egiteko eskatzen diogu
                     mediaController?.transportControls?.seekTo(newPosition)
                 }
             }
@@ -62,22 +78,31 @@ class MainScreenFragment : Fragment() {
         })
     }
 
+    // Abestia erreproduzitzen ari den bitartean barraren egoera automatikoki eguneratzen da
     private fun startSeekBarUpdater() {
+        // Aurreko job-a bertan behera utzi, existitzen bada
         seekBarJob?.cancel()
+        // Coroutine bat abiatu (lifecycleScope → fragment bizi den bitartean martxan)
         seekBarJob = lifecycleScope.launch {
             while (isActive) {
+                // MediaController, playbackState eta metadata existitzen badira…
                 val controller = mediaController
                 val state = controller?.playbackState
                 val metadata = controller?.metadata
                 if (controller != null && state != null && metadata != null) {
+                    // Abestiaren iraupena
                     val duration = metadata.getLong(MediaMetadata.METADATA_KEY_DURATION)
+                    // Abestiaren uneko posizioa (ms-tan)
                     val position = state.position
+                    // Progresoa kalkulatu (% moduan)
                     val progress = if (duration > 0) (position * 100 / duration).toInt() else 0
 
+                    // UI-n barraren balioa eguneratu
                     activity?.runOnUiThread {
                         binding.musicCard.seekBar.progress = progress
                     }
                 }
+                // 0.5 segundoan behin eguneratzen da
                 delay(500)
             }
         }
@@ -94,6 +119,8 @@ class MainScreenFragment : Fragment() {
         return binding.root
     }
 
+    // fragmentu honetara bueltatzerakoan berrabiaraziko ditugu parte batzuk, bestela
+    // kudeatuko dugu fragmentua eguneratzeko tasa, adibidez 5 segunduro
     @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
     override fun onResume() {
         super.onResume()
@@ -134,51 +161,77 @@ class MainScreenFragment : Fragment() {
         // GPSaren kokapena lortzen saiatuko gara
         getLocation()
 
-        // --- Initialize Device Music Controller ---
-        initMediaController()
-        setupSeekBar()
-        startSeekBarUpdater()
+        // Musika kontrolatzeko sistemaren hasiera
+        initMediaController() // controlatzailea
+        setupSeekBar() // abestiaren barra
+        startSeekBarUpdater() // barraren eguneraketa kontrolatzeko
 
-
+        // Play/Pause botoiaren portaera
         binding.musicCard.btnPlaypause.setOnClickListener {
             mediaController?.let { controller ->
                 val state = controller.playbackState?.state
                 if (state == PlaybackState.STATE_PLAYING) {
-                    controller.transportControls.pause()
+                    controller.transportControls.pause() // gelditu
                 } else {
-                    controller.transportControls.play()
+                    controller.transportControls.play() // abiatu
                 }
             }
         }
 
+        // Hurrengo abestira pasa
         binding.musicCard.btnNext.setOnClickListener {
             mediaController?.transportControls?.skipToNext()
         }
     }
 
+    //Spotify bezalako aplikazio baten MediaSession aktiboa bilatu eta kontrolatzen hasten da
     private fun initMediaController() {
+
+        // MediaSessionManager eskuratu (sistemako zerbitzua)
         mediaSessionManager = requireContext().getSystemService(MediaSessionManager::class.java)
 
+        // Notifikazio-listenerra identifikatzen duen ComponentName
         val component = ComponentName(requireContext(), MyNotificationListener::class.java)
 
-        // Load active session
+        // Aktibo dauden MediaSession guztiak lortu
         updateMediaController()
 
-        // Listen for session changes (if a new app starts playing)
+        // Bat badago, kontrolatzen hasiko gara (normalean Spotify)
         mediaSessionManager.getActiveSessions(component)?.let { controllers ->
             if (controllers.isNotEmpty()) {
+                // Abestiaren datuak bistaratzen hasi
                 mediaController = controllers[0]
                 mediaController?.metadata?.let { updateUIFromMetadata(it) }
+
+                // PlaybackState eta metadata aldaketak entzuteko callback erregistratu
                 mediaController?.registerCallback(mediaControllerCallback)
             }
         }
     }
 
+    // abestiaren arabera ikonoa aldatuko dugu, play edo pause ikonoak jarrita
+    private fun updatePlayPauseIcon(state: Int?) {
+        activity?.runOnUiThread {
+            when (state) {
+                PlaybackState.STATE_PLAYING ->
+                    binding.musicCard.btnPlaypause.setImageResource(R.drawable.ic_pause__2_)
+
+                else ->
+                    binding.musicCard.btnPlaypause.setImageResource(R.drawable.ic_play)
+            }
+        }
+    }
+
+
     private val mediaControllerCallback = object : MediaController.Callback() {
+
+        // Spotify-k PLAY edo PAUSE egoera aldatzen duenean deitzen da
         override fun onPlaybackStateChanged(state: PlaybackState?) {
+            updatePlayPauseIcon(state?.state) // hemendik kudeatuko dugu ikonoaren aldaketa
             startSeekBarUpdater()
         }
 
+        // Abestia aldatzen denean deitzen da (titulua, irudia, iraupena…)
         override fun onMetadataChanged(metadata: MediaMetadata?) {
             updateUIFromMetadata(metadata)
             startSeekBarUpdater()
@@ -186,6 +239,7 @@ class MainScreenFragment : Fragment() {
     }
 
 
+    // Spotify aktibo dagoen bilatzen du
     private fun updateMediaController() {
         val controllers = mediaSessionManager.getActiveSessions(
             ComponentName(requireContext(), MyNotificationListener::class.java)
@@ -195,20 +249,25 @@ class MainScreenFragment : Fragment() {
             mediaController?.metadata?.let { updateUIFromMetadata(it) }
             mediaController?.registerCallback(mediaControllerCallback)
         } else {
-            Toast.makeText(requireContext(), "No active music session", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Ez dago musikarik martxan.", Toast.LENGTH_SHORT)
+                .show()
         }
     }
 
+    // interfazeko aldagaiak eguneratuko ditugu abestiaren metadataren arabera, adibidez irudia
     private fun updateUIFromMetadata(metadata: MediaMetadata?) {
         metadata?.let {
             activity?.runOnUiThread {
+
+                // Album art bilatzen dugu
                 val albumArt = it.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART)
                     ?: it.getBitmap(MediaMetadata.METADATA_KEY_ART)
+
+                // eguneratzeko interfazea
                 binding.musicCard.songImg.setImageBitmap(albumArt)
             }
         }
     }
-
 
 
     // data eta hordua lortuko dugu hemendik eta binding bidez ezarri fragmentuan
