@@ -161,6 +161,12 @@ class MainScreenFragment : Fragment() {
         // GPSaren kokapena lortzen saiatuko gara
         getLocation()
 
+        // ea dagoen mediasession bat martxan notifikazio barran, adb spotify
+        MyNotificationListener.onNotificationUpdate = {
+            updateMediaController()   // MediaSession berria bilatu
+        }
+
+
         // Musika kontrolatzeko sistemaren hasiera
         initMediaController() // controlatzailea
         setupSeekBar() // abestiaren barra
