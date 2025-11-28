@@ -255,8 +255,9 @@ class MainScreenFragment : Fragment() {
             mediaController?.metadata?.let { updateUIFromMetadata(it) }
             mediaController?.registerCallback(mediaControllerCallback)
         } else {
-            Toast.makeText(requireContext(), "Ez dago musikarik martxan.", Toast.LENGTH_SHORT)
-                .show()
+            /*
+            * Toast.makeText(requireContext(), "Ez dago musikarik martxan.", Toast.LENGTH_SHORT).show()
+            * */
         }
     }
 

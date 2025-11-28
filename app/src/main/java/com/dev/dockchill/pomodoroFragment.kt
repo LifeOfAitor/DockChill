@@ -1,59 +1,68 @@
 package com.dev.dockchill
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import com.dev.dockchill.databinding.FragmentPomodoroBinding
+import androidx.transition.TransitionManager
+import androidx.core.view.isVisible
+import androidx.core.view.isGone
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class PomodoroFragment : Fragment() {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [pomodoroFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class pomodoroFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var binding: FragmentPomodoroBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        // Fragment-aren layout-a inflatu eta binding sortu
+        binding = FragmentPomodoroBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.btnMenu.setOnClickListener {
+            if (binding.pomodoroMenu.isGone) {
+                // MOSTRAR
+                binding.pomodoroMenu.apply {
+                    alpha = 0f
+                    translationY = -50f // Empieza un poco más arriba
+                    visibility = View.VISIBLE
+
+                    animate()
+                        .alpha(1f)
+                        .translationY(0f) // Vuelve a su posición original
+                        .setDuration(300)
+                        .setListener(null)
+                }
+            } else {
+                // OCULTAR
+                binding.pomodoroMenu.animate()
+                    .alpha(0f)
+                    .translationY(-50f) // Se mueve hacia arriba al desaparecer
+                    .setDuration(300)
+                    .withEndAction {
+                        binding.pomodoroMenu.visibility = View.GONE
+                    }
+            }
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_pomodoro, container, false)
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment pomodoroFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            pomodoroFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onResume() {
+        super.onResume()
+        binding.pomodoroMenu.animate()
+            .alpha(0f)
+            .translationY(-50f) // Se mueve hacia arriba al desaparecer
+            .setDuration(300)
+            .withEndAction {
+                binding.pomodoroMenu.visibility = View.GONE
             }
     }
+
 }

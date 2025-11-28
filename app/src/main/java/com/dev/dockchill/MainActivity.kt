@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
         //fragmentak sortu eta ezarri
         override fun createFragment(position: Int): Fragment {
             return when (position) {
-                0 -> pomodoroFragment() // Fragmentua 0. posizioan
+                0 -> PomodoroFragment() // Fragmentua 0. posizioan
                 1 -> MainScreenFragment() // Fragmentua 1. posizioan (Defektuzkoa)
                 else -> todo_listFragment() // Fragmentua 2. posizioan
             }
