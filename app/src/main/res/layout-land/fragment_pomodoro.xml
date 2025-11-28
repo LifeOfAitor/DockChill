@@ -54,6 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="8dp"
+                android:min="25"
                 android:max="60"
                 android:progress="25"
                 android:progressTint="@color/md_theme_onSecondaryContainer"
@@ -66,7 +67,7 @@
                 android:id="@+id/value_iraupena"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="25:00"
+                android:text="25 min"
                 android:textAppearance="?attr/textAppearanceTitleMedium"
                 android:textColor="@color/md_theme_onSecondaryContainer"
                 android:textSize="16sp"
@@ -95,6 +96,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="8dp"
+                android:min="5"
                 android:max="15"
                 android:progress="10"
                 android:progressTint="@color/md_theme_onSecondaryContainer"
@@ -107,7 +109,7 @@
                 android:id="@+id/value_rest"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="10:00"
+                android:text="10 min"
                 android:textAppearance="?attr/textAppearanceTitleMedium"
                 android:textColor="@color/md_theme_onSecondaryContainer"
                 android:textSize="16sp"
@@ -136,6 +138,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="8dp"
+                android:min="1"
                 android:max="10"
                 android:progress="4"
                 android:progressTint="@color/md_theme_onSecondaryContainer"
@@ -160,5 +163,8 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>
+
+    <!-- orain osagai guztiak -->
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

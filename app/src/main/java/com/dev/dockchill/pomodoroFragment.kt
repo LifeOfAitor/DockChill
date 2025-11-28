@@ -1,9 +1,11 @@
 package com.dev.dockchill
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SeekBar
 import androidx.fragment.app.Fragment
 import com.dev.dockchill.databinding.FragmentPomodoroBinding
 import androidx.transition.TransitionManager
@@ -27,6 +29,7 @@ class PomodoroFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // menuaren konportamendua animazio txiki batekin
         binding.btnMenu.setOnClickListener {
             if (binding.pomodoroMenu.isGone) {
                 // MOSTRAR
@@ -52,6 +55,34 @@ class PomodoroFragment : Fragment() {
                     }
             }
         }
+
+        // menuko informazioa aldatu sliderra mugitzean
+        binding.seekBarIraupena.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                binding.valueIraupena.text = "$progress min"
+            }
+            //ez dira beharrezkoak baina utzi behar dira
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
+
+        binding.seekBarRest.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                binding.valueRest.text = "$progress min"
+            }
+            //ez dira beharrezkoak baina utzi behar dira
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
+
+        binding.seekBarRondak.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                binding.valueRondak.text = "$progress"
+            }
+            //ez dira beharrezkoak baina utzi behar dira
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
     }
 
     override fun onResume() {
