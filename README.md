@@ -1,4 +1,4 @@
-# SmartDock
+# DockChill
 
 Android aplikazio bat, iPhone-en “Landscape Dock”-aren inspirazioz sortua.  
 Mugikorra horizontalki jartzean, informazio erabilgarria erakusten du: ordua, eguraldia eta erlaxazio-soinuak.  

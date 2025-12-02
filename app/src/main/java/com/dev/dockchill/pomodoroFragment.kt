@@ -1,6 +1,5 @@
 package com.dev.dockchill
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,8 +7,6 @@ import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.fragment.app.Fragment
 import com.dev.dockchill.databinding.FragmentPomodoroBinding
-import androidx.transition.TransitionManager
-import androidx.core.view.isVisible
 import androidx.core.view.isGone
 
 class PomodoroFragment : Fragment() {
@@ -32,7 +29,7 @@ class PomodoroFragment : Fragment() {
         // menuaren konportamendua animazio txiki batekin
         binding.btnMenu.setOnClickListener {
             if (binding.pomodoroMenu.isGone) {
-                // MOSTRAR
+                // menua erakusteko
                 binding.pomodoroMenu.apply {
                     alpha = 0f
                     translationY = -50f // Empieza un poco más arriba
@@ -45,7 +42,7 @@ class PomodoroFragment : Fragment() {
                         .setListener(null)
                 }
             } else {
-                // OCULTAR
+                // menua ixteko
                 binding.pomodoroMenu.animate()
                     .alpha(0f)
                     .translationY(-50f) // Se mueve hacia arriba al desaparecer
@@ -56,7 +53,11 @@ class PomodoroFragment : Fragment() {
             }
         }
 
-        // menuko informazioa aldatu sliderra mugitzean
+        // pomodoroko menuko informazioa aldatu sliderra mugitzean
+        // slider bakoitzak bere balioak izango ditu, azkenean hautatutako balioak gordeko dira
+        // Pomodoro kontadorera aplikatzeko
+
+        //IRAUPENA
         binding.seekBarIraupena.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 binding.valueIraupena.text = "$progress min"
@@ -66,6 +67,7 @@ class PomodoroFragment : Fragment() {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
 
+        //DESKANTSOA
         binding.seekBarRest.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 binding.valueRest.text = "$progress min"
@@ -75,6 +77,7 @@ class PomodoroFragment : Fragment() {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
 
+        // RONDA kopurua
         binding.seekBarRondak.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 binding.valueRondak.text = "$progress"
@@ -85,6 +88,7 @@ class PomodoroFragment : Fragment() {
         })
     }
 
+    // menua irekita badago, fragmentu honetara bueltatzerakoan automatikoki itxi egingo da
     override fun onResume() {
         super.onResume()
         binding.pomodoroMenu.animate()
