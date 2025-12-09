@@ -372,7 +372,10 @@ class MainScreenFragment : Fragment() {
 
         } else {
             // Ez da GPS kokapena lortu (null) -> mezu bat erakutsi eta UI-n errorea jarri
-            Toast.makeText(requireContext(), "Ezin izan da lortu GPS", Toast.LENGTH_SHORT).show()
+            /*
+            * Toast.makeText(requireContext(), "Ezin izan da lortu GPS", Toast.LENGTH_SHORT).show()
+            */
+            Log.e("aitor", "Ezin izan da lortu GPS")
             binding.weatherCard.gaurTemperatureText.text = "Error °C"
             binding.weatherCard.gaurWeatherDescription.text = "Error"
             binding.weatherCard.biharTemperatureText.text = "Error °C"
