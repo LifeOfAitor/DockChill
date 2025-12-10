@@ -9,6 +9,7 @@ import android.widget.SeekBar
 import androidx.fragment.app.Fragment
 import com.dev.dockchill.databinding.FragmentPomodoroBinding
 import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.dev.dockchill.data.PomodoroDatabase
@@ -62,6 +63,9 @@ class PomodoroFragment : Fragment() {
         setupTimerButtons()
         initializeTimer()
 
+        //menuak itxi pantaiako edozein puntutan click egitean
+        binding.screen.setOnClickListener { hideMenus() }
+
         // menuaren konportamendua animazio txiki batekin
         binding.btnMenu.setOnClickListener {
             if (binding.pomodoroMenu.isGone) {
@@ -88,6 +92,7 @@ class PomodoroFragment : Fragment() {
                         .setDuration(300)
                         .setListener(null)
                 }
+                binding.timerContainer.apply { visibility = View.GONE }
 
             } else {
                 // menuak ixteko
@@ -149,26 +154,29 @@ class PomodoroFragment : Fragment() {
     }
 
     private fun hideMenus() {
-        binding.pomodoroMenu.animate()
-            .alpha(0f)
-            .translationY(-50f) // Se mueve hacia arriba al desaparecer
-            .setDuration(300)
-            .withEndAction {
-                binding.pomodoroMenu.visibility = View.GONE
-            }
-        binding.statsPanel.animate()
-            .alpha(0f)
-            .translationY(-50f) // Se mueve hacia arriba al desaparecer
-            .setDuration(300)
-            .withEndAction {
-                binding.pomodoroMenu.visibility = View.GONE
-            }
+        if (binding.pomodoroMenu.isVisible) {
+            binding.pomodoroMenu.animate()
+                .alpha(0f)
+                .translationY(-50f) // Se mueve hacia arriba al desaparecer
+                .setDuration(300)
+                .withEndAction {
+                    binding.pomodoroMenu.visibility = View.GONE
+                }
+            binding.statsPanel.animate()
+                .alpha(0f)
+                .translationY(-50f) // Se mueve hacia arriba al desaparecer
+                .setDuration(300)
+                .withEndAction {
+                    binding.pomodoroMenu.visibility = View.GONE
+                }
+            binding.timerContainer.apply { visibility = View.VISIBLE }
+        }
     }
 
 
     private fun setupStatisticsObservers() {
-        // Estatistika bisten behaketa - datu basearen aldaketak entzuten ditugu eta pantailan eguneratzen ditugunbistak
-        // Observe today's pomodoros
+        // Estatistika bisten behaketa - datu basearen aldaketak entzuten ditugu eta pantailan eguneratzen ditugu
+        // gaurko pomodoroak ikusteko
         lifecycleScope.launch {
             viewModel.todayPomodoros.collect { count ->
                 binding.todayPomodoros.text = count.toString()
@@ -243,10 +251,10 @@ class PomodoroFragment : Fragment() {
                 if (isWorkSession) {
                     // Lan saioa osatuta - datu basean batekin gordetzen da eta deskantso saioaren arabera aldatzen da
                     viewModel.addCompletedPomodoro(pomodoroLengthMinutes)
-                    // Deskantso saioaren kaldera aldatzen da
+                    // Deskantso saioaren egoera aldatzen da
                     isWorkSession = false
                 } else {
-                    // Deskantso saiooa osatuta - ronda gehitu eta beste deskantso saioak dauden konprobatu
+                    // Deskantso saiooa osatuta - ronda gehitu eta beste deskantso saioak ea dauden konprobatu
                     pomodoroCurrentRound++
                     isWorkSession = true
 

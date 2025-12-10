@@ -2,7 +2,6 @@ package com.dev.dockchill
 
 import android.Manifest
 import android.content.ComponentName
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.media.MediaMetadata
@@ -12,10 +11,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.RequiresPermission
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.dev.dockchill.databinding.FragmentMainScreenBinding
 import kotlinx.coroutines.delay
@@ -23,10 +20,9 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import android.media.session.MediaController
 import android.media.session.PlaybackState
-import android.os.Build
-import android.provider.Settings
 import android.widget.SeekBar
-import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.fragment.app.Fragment
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -151,6 +147,9 @@ class MainScreenFragment : Fragment() {
     @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        //tema aldatzeko
+        binding.themeImg.setOnClickListener { changeTheme() }
 
         // Weather klasearen instantzia sortu, eguraldiaren datuak lortzeko
         weather = Weather(requireContext())
@@ -382,4 +381,22 @@ class MainScreenFragment : Fragment() {
             binding.weatherCard.biharWeatherDescription.text = "Error"
         }
     }
+
+    //Aplikazioaren tema aldatzeko funtzioa
+    private fun changeTheme() {
+        // Lortu telefonoaren tema sistemako konfiguraziotik
+        val currentNightMode = resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK
+
+        when (currentNightMode) {
+            android.content.res.Configuration.UI_MODE_NIGHT_YES -> {
+                // aldatu tema argira
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+            else -> {
+                // aldatu tema ilunera
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            }
+        }
+    }
+
 }

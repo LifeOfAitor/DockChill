@@ -68,6 +68,9 @@ dependencies {
     //Coroutines (Thread antzekoak)
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
+    //Tema aldatzeko
+    implementation("com.dolatkia:animated-theme-manager:1.1.4")
+
     implementation(libs.androidx.constraintlayout)
     implementation(libs.play.services.location)
     implementation(libs.protolite.well.known.types)
