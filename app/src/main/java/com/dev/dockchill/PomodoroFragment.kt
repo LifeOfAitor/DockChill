@@ -153,6 +153,8 @@ class PomodoroFragment : Fragment() {
         hideMenus()
     }
 
+
+    // menuak irekita badaude, fragmentu honetara bueltatzerakoan automatikoki itxi egingo da
     private fun hideMenus() {
         if (binding.pomodoroMenu.isVisible) {
             binding.pomodoroMenu.animate()
@@ -225,18 +227,22 @@ class PomodoroFragment : Fragment() {
     }
 
     private fun initializeTimer() {
-        // Erlojua inicializatzen dugu - lan saioaren edo deskantsoaren arabera denbora kalkulatzen da
+        // Erlojua inizializatzen dugu - lan saioaren edo deskantsoaren arabera denbora kalkulatzen da
         // Pantailako elementuak eguneratzen ditugu eta ronda zenbakia erakusten dugu
         val durationMinutes = if (isWorkSession) pomodoroLengthMinutes else pomodoroRestMinutes
         timeLeftInMillis = durationMinutes * 60 * 1000L
         updateTimerText()
         updateCircularProgress()
         binding.roundText.text = "$pomodoroCurrentRound / $pomodoroRounds"
+        if (isWorkSession){
+            binding.txtEgoera.text = "LANEAN"
+        }else{
+            binding.txtEgoera.text = "DESKANTSOA"
+        }
     }
 
     private fun startTimer() {
-        // Kontaketa atzerakoak hasten dugu - segundu bakoitzean denbora eta progresoa eguneratzen dira
-        // Saio osoa bukatzean, lan saioa datu basean gordetzen da eta deskantso saiora aldatzen da
+        // Timerra sortu
         countDownTimer = object : CountDownTimer(timeLeftInMillis, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 timeLeftInMillis = millisUntilFinished
@@ -245,33 +251,54 @@ class PomodoroFragment : Fragment() {
             }
 
             override fun onFinish() {
-                isTimerRunning = false
-                binding.btnStartPause.apply { setIconResource(R.drawable.ic_play) }
+                // automatikoki hasiko da deskantsoa edo berriro sesioa geratzen diren ronden arabera
 
                 if (isWorkSession) {
-                    // Lan saioa osatuta - datu basean batekin gordetzen da eta deskantso saioaren arabera aldatzen da
+                    // --- Lan sesioa bukatuta ---
+
+                    // gorde datuak datubasean
                     viewModel.addCompletedPomodoro(pomodoroLengthMinutes)
-                    // Deskantso saioaren egoera aldatzen da
+
+                    // "deskantso" modura aldatu"
                     isWorkSession = false
+
+                    // prestatu deskantsorako denbora
+                    initializeTimer()
+
+                    // automatikoki hasi timerra hurrengo sesiorako
+                    startTimer()
+
                 } else {
-                    // Deskantso saiooa osatuta - ronda gehitu eta beste deskantso saioak ea dauden konprobatu
+                    // --- deskantso sesioa bukatuta ---
+
+                    // ronda gehitu
                     pomodoroCurrentRound++
+
+                    // lan modua ezarri
                     isWorkSession = true
 
+                    // konprobatu ea rondarik geratzen den len egiteko
                     if (pomodoroCurrentRound > pomodoroRounds) {
-                        // Ronda guztiak osaturik - hasierako rondara itzuli
+                        // Bukatuta badaude sesio guztiak dena gelditu
+                        isTimerRunning = false
+                        binding.btnStartPause.apply { setIconResource(R.drawable.ic_play) }
+
+                        // Lehenengo rondara bueltatu aurreragorako
                         pomodoroCurrentRound = 1
+                        initializeTimer()
+                    } else {
+                        // bestela beste sesio bat hasi
+                        initializeTimer()
+                        startTimer()
                     }
                 }
-
-                // Hurrengo saioarentzat erlojua inicializatzen da
-                initializeTimer()
             }
         }.start()
 
         isTimerRunning = true
         binding.btnStartPause.apply { setIconResource(R.drawable.ic_pause__2_) }
     }
+
 
     private fun pauseTimer() {
         // Erlojua eten egiten dugu - denborat gordetu egiten da hurrengo hasiera arte
