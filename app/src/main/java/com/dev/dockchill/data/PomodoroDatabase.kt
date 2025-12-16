@@ -5,6 +5,8 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
+// Datu basea hemen sortuko dugu.
+// Fitxategi honetan lortuko dugu aurretik sortutako @Entity eta Dao fitxategiak elkarrekin lotzea
 @Database(entities = [PomodoroStats::class], version = 1, exportSchema = false)
 abstract class PomodoroDatabase : RoomDatabase() {
 

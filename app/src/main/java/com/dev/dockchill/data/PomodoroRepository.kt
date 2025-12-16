@@ -5,12 +5,15 @@ import com.dev.dockchill.data.PomodoroStats
 import kotlinx.coroutines.flow.Flow
 import java.util.Calendar
 
+// Repository honetan aurretik sortu ditugun entity, dao eta database lotuko ditu, azkenik ViewModel
+// fitxategiak honera egingo baitu erreferentzia
 class PomodoroRepository(private val pomodoroStatsDao: PomodoroStatsDao) {
 
     val allStats: Flow<List<PomodoroStats>> = pomodoroStatsDao.getAllStats()
     val totalPomodoros: Flow<Int?> = pomodoroStatsDao.getTotalPomodoros()
     val totalFocusMinutes: Flow<Int?> = pomodoroStatsDao.getTotalFocusMinutes()
 
+    // Pomodoro sesio bat gordeko dugu datu basean
     suspend fun addCompletedPomodoro(focusMinutes: Int) {
         val today = getTodayDateInMillis()
         val existingStats = pomodoroStatsDao.getStatsByDate(today)
@@ -33,16 +36,18 @@ class PomodoroRepository(private val pomodoroStatsDao: PomodoroStatsDao) {
         }
     }
 
+    // gaurko estatistikak lortuko ditugu hemendik
     suspend fun getTodayStats(): PomodoroStats? {
         return pomodoroStatsDao.getStatsByDate(getTodayDateInMillis())
     }
 
     suspend fun calculateCurrentStreak(): Int {
         val allStats = pomodoroStatsDao.getAllStats()
-        // This will be calculated in ViewModel from Flow
+        // ViewModeletik kalkulatuko dugu Flow erabiliz
         return 0
     }
 
+    // gaurko data milisegundoetan lortuko dugu hemendik
     private fun getTodayDateInMillis(): Long {
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.HOUR_OF_DAY, 0)

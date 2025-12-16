@@ -12,6 +12,8 @@ import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
+// Hemendik lortuko dugu UI eta repository elkarrekin lotzea.
+// Datuak modu konkurrenteak eguneratzeko erabiliko dugu klase hau MVVM printzipioa erabiliko duena
 class PomodoroViewModel(private val repository: PomodoroRepository) : ViewModel() {
 
     val totalPomodoros = repository.totalPomodoros.asLiveData()
@@ -32,17 +34,18 @@ class PomodoroViewModel(private val repository: PomodoroRepository) : ViewModel(
 
     private fun loadStatistics() {
         viewModelScope.launch {
-            // Load today's pomodoros
+            // Gaurko pomodoroak kargatuko ditugu
             val todayStats = repository.getTodayStats()
             _todayPomodoros.value = todayStats?.completedPomodoros ?: 0
 
-            // Calculate streaks
+            // Zenbat sesio segidan egin ditugun kargatuko da
             repository.allStats.collect { statsList ->
                 calculateStreaks(statsList)
             }
         }
     }
 
+    // Pomodoro bat gehituko dugu datu basera
     fun addCompletedPomodoro(focusMinutes: Int) {
         viewModelScope.launch {
             repository.addCompletedPomodoro(focusMinutes)
@@ -52,6 +55,7 @@ class PomodoroViewModel(private val repository: PomodoroRepository) : ViewModel(
         }
     }
 
+    // Zenbat sesio segidan egin ditugun kargatuko da
     private fun calculateStreaks(statsList: List<PomodoroStats>) {
         if (statsList.isEmpty()) {
             _currentStreak.value = 0
@@ -93,6 +97,7 @@ class PomodoroViewModel(private val repository: PomodoroRepository) : ViewModel(
         _longestStreak.value = longestStreak
     }
 
+    // gaurko data milisegundoetan lortuko dugu hemendik
     private fun getTodayDateInMillis(): Long {
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.HOUR_OF_DAY, 0)
