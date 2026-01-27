@@ -1,14 +1,118 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/screen"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".todo_listFragment">
+    tools:context=".MainScreenFragment"
+    tools:ignore="MissingDefaultResource">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="To-do list app will be here" />
+    <ImageView
+        android:id="@+id/btn_menu"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="1dp"
+        android:src="@drawable/ic_add"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/md_theme_onSecondaryContainer" />
 
-</ScrollView>
+    <!-- Eginbehar berria sartzeko -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/addtodomenu"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        android:backgroundTint="@color/md_theme_secondaryContainer"
+        android:visibility="gone"
+        app:cardCornerRadius="30dp"
+        app:layout_constraintStart_toEndOf="@+id/btn_menu"
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeColor="@color/md_theme_onSecondaryContainer"
+        app:strokeWidth="4dp"
+        android:layout_marginTop="16dp"
+        tools:ignore="MissingConstraints">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="25dp" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="10dp"
+                android:text="IZENBURUA"
+                android:textColor="@color/md_theme_onSecondaryContainer"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextIzenburua"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="16dp"
+                android:background="@color/md_theme_onSecondary"
+                android:hint="eginbeharraren izenburua"
+                android:padding="12dp"
+                android:textColor="@color/md_theme_primary"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="DESKRIPZIOA"
+                android:textColor="@color/md_theme_onSecondaryContainer"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextDescripcion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@color/md_theme_onSecondary"
+                android:gravity="top"
+                android:hint="eginbeharraren deskripzioa"
+                android:minLines="3"
+
+                android:padding="12dp"
+                android:textColor="#000"
+                android:textSize="16sp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_add_eginbeharra"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:backgroundTint="@color/md_theme_onSecondaryContainer"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:text="GEHITU"
+                android:textColor="@color/md_theme_secondaryContainer"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:cornerRadius="40dp" />
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- METER AQUI UN TITULO A VER SI SE PUEDE VER -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/view_lista"
+        android:layout_width="800dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/btn_menu"
+        app:layout_constraintTop_toTopOf="parent"
+        android:clipToPadding="false"
+        android:paddingHorizontal="8dp"
+        android:layout_marginTop="16dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_todo"
+        android:visibility="visible"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

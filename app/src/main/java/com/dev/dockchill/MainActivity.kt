@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
             return when (position) {
                 0 -> PomodoroFragment() // Fragmentua 0. posizioan
                 1 -> MainScreenFragment() // Fragmentua 1. posizioan (Defektuzkoa)
-                else -> todo_listFragment() // Fragmentua 2. posizioan
+                else -> TodolistFragment() // Fragmentua 2. posizioan
             }
         }
     }

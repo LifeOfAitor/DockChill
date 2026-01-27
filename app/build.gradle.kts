@@ -71,6 +71,9 @@ dependencies {
     //Tema aldatzeko
     implementation("com.dolatkia:animated-theme-manager:1.1.4")
 
+    //GSON
+    implementation("com.google.code.gson:gson:2.13.2")
+
     implementation(libs.androidx.constraintlayout)
     implementation(libs.play.services.location)
     implementation(libs.protolite.well.known.types)

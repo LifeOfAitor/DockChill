@@ -378,15 +378,12 @@ class MainScreenFragment : Fragment() {
 
     private fun erakutsiErrorea(){
         //errore ikonoen kolorea val honetan gordeko dut gerorago ezartzeko
-        val errorColor = ContextCompat.getColor(requireContext(), R.color.md_theme_error)
         binding.weatherCard.gaurTemperatureText.text = "Error °C"
         binding.weatherCard.gaurWeatherDescription.text = "Error"
         binding.weatherCard.biharTemperatureText.text = "Error °C"
         binding.weatherCard.biharWeatherDescription.text = "Error"
         binding.weatherCard.gaurWeatherIcon.setImageResource(R.drawable.ic_error)
         binding.weatherCard.biharWeatherIcon.setImageResource(R.drawable.ic_error)
-        binding.weatherCard.gaurWeatherIcon.setColorFilter(errorColor)
-        binding.weatherCard.biharWeatherIcon.setColorFilter(errorColor)
     }
 
     //Aplikazioaren tema aldatzeko funtzioa
