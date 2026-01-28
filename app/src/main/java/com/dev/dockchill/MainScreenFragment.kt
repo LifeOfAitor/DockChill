@@ -1,12 +1,16 @@
 package com.dev.dockchill
 
 import android.Manifest
+import android.app.NotificationManager
 import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.media.MediaMetadata
 import android.media.session.MediaSessionManager
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -147,6 +151,8 @@ class MainScreenFragment : Fragment() {
     @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        checkAndRequestNotificationListenerPermission()
 
         //tema aldatzeko
         binding.themeImg.setOnClickListener { changeTheme() }
@@ -406,5 +412,16 @@ class MainScreenFragment : Fragment() {
             }
         }
     }
+    private fun checkAndRequestNotificationListenerPermission() {
+        val isNotificationListenerEnabled = Settings.Secure.getString(
+            requireContext().contentResolver,
+            "enabled_notification_listeners"
+        )?.contains(requireContext().packageName) ?: false
 
+        if (!isNotificationListenerEnabled) {
+            // Konfigurazioetara joan eta erabiltzaileari notifikazio-listener baimena emateko eskatzen dio
+            val intent = Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
+            startActivity(intent)
+        }
+    }
 }
