@@ -29,7 +29,7 @@ class EginbeharrakRepository(private val context: Context) {
     /**
      * Eginbeharren zerrenda gorde fitxategi lokal batean JSON formatuan.
      */
-    fun guardarEginbeharrak(lista: List<Eginbeharra>) {
+    fun gordeEginbeharrak(lista: List<Eginbeharra>) {
         val jsonString = gson.toJson(lista)
         context.openFileOutput(fileName, Context.MODE_PRIVATE).use {
             it.write(jsonString.toByteArray())

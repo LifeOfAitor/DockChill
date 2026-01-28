@@ -376,7 +376,7 @@ class MainScreenFragment : Fragment() {
         }
     }
 
-    private fun erakutsiErrorea(){
+    private fun erakutsiErrorea() {
         //errore ikonoen kolorea val honetan gordeko dut gerorago ezartzeko
         binding.weatherCard.gaurTemperatureText.text = "Error °C"
         binding.weatherCard.gaurWeatherDescription.text = "Error"
@@ -389,16 +389,20 @@ class MainScreenFragment : Fragment() {
     //Aplikazioaren tema aldatzeko funtzioa
     private fun changeTheme() {
         // Lortu telefonoaren tema sistemako konfiguraziotik
-        val currentNightMode = resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK
+        val currentNightMode =
+            resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK
 
         when (currentNightMode) {
             android.content.res.Configuration.UI_MODE_NIGHT_YES -> {
-                // aldatu tema argira
+                // aldatu tema argira eta ikonoa aldatu
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                binding.themeImg.setImageResource(R.drawable.ic_dark)
             }
+
             else -> {
-                // aldatu tema ilunera
+                // aldatu tema ilunera eta ikonoa aldatu
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                binding.themeImg.setImageResource(R.drawable.ic_light)
             }
         }
     }

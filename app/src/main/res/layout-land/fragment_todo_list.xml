@@ -1,7 +1,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/screen"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/screen"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainScreenFragment"
@@ -17,28 +17,29 @@
         app:layout_constraintTop_toTopOf="parent"
         app:tint="@color/md_theme_onSecondaryContainer" />
 
-    <!-- Eginbehar berria sartzeko -->
+    <!-- Eginbehar berria sartzeko (IZTENA) -->
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/addtodomenu"
-        android:layout_width="400dp"
-        android:layout_height="wrap_content"
+        android:id="@+id/menu_berria"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="15dp"
         android:animateLayoutChanges="true"
         android:backgroundTint="@color/md_theme_secondaryContainer"
         android:visibility="gone"
         app:cardCornerRadius="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btn_menu"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.4"
         app:strokeColor="@color/md_theme_onSecondaryContainer"
-        app:strokeWidth="4dp"
-        android:layout_marginTop="16dp"
-        tools:ignore="MissingConstraints">
+        app:strokeWidth="4dp">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:gravity="center_horizontal"
             android:orientation="vertical"
-            android:padding="25dp" >
+            android:padding="25dp">
 
             <TextView
                 android:layout_width="match_parent"
@@ -79,7 +80,6 @@
                 android:gravity="top"
                 android:hint="eginbeharraren deskripzioa"
                 android:minLines="3"
-
                 android:padding="12dp"
                 android:textColor="#000"
                 android:textSize="16sp" />
@@ -101,18 +101,130 @@
 
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- METER AQUI UN TITULO A VER SI SE PUEDE VER -->
+    <!-- Eginbeharren lista (EZKERRAN) -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/view_lista"
-        android:layout_width="800dp"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="15dp"
+        android:paddingHorizontal="8dp"
+        android:visibility="visible"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/editPanel"
         app:layout_constraintStart_toEndOf="@+id/btn_menu"
         app:layout_constraintTop_toTopOf="parent"
-        android:clipToPadding="false"
-        android:paddingHorizontal="8dp"
-        android:layout_marginTop="16dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_todo"
-        android:visibility="visible"/>
+        tools:listitem="@layout/item_todo" />
+
+    <!-- Eginbeharrak editatzeko menua (ESKUINEAN) -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/editPanel"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="15dp"
+        android:backgroundTint="@color/md_theme_secondaryContainer"
+        android:visibility="gone"
+        app:cardCornerRadius="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/view_lista"
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeColor="@color/md_theme_onSecondaryContainer"
+        app:strokeWidth="4dp">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:text="EDITATU"
+                    android:textColor="@color/md_theme_onSecondaryContainer"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:text="IZENBURUA"
+                    android:textColor="@color/md_theme_onSecondaryContainer"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editPanelTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="42dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@color/md_theme_onSecondary"
+                    android:hint="izenburua"
+                    android:padding="10dp"
+                    android:textColor="@color/md_theme_primary"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:text="DESKRIPZIOA"
+                    android:textColor="@color/md_theme_onSecondaryContainer"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editPanelDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_marginBottom="12dp"
+                    android:background="@color/md_theme_onSecondary"
+                    android:gravity="top"
+                    android:hint="deskripzioa"
+                    android:padding="10dp"
+                    android:textColor="@color/md_theme_primary"
+                    android:textSize="14sp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_save_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:backgroundTint="@color/md_theme_onSecondaryContainer"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:text="GORDE"
+                    android:textColor="@color/md_theme_secondaryContainer"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:cornerRadius="20dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_cancel_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/md_theme_outlineVariant"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:text="UTZI"
+                    android:textColor="@color/md_theme_onSecondaryContainer"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:cornerRadius="20dp" />
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

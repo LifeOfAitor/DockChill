@@ -12,7 +12,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_margin="10dp"
-        android:src="@drawable/ic_light"
+        android:src="@drawable/ic_dark"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:tint="@color/md_theme_onBackground" />
@@ -29,22 +29,22 @@
 
         <TextView
             android:id="@+id/time_text"
-            android:textColor="@color/md_theme_onBackground_mediumContrast"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-light"
             android:letterSpacing="0.02"
+            android:textColor="@color/md_theme_onBackground_mediumContrast"
             android:textSize="100sp"
             android:textStyle="bold"
             tools:text="12:45" />
 
         <TextView
             android:id="@+id/date_text"
-            android:textColor="@color/md_theme_onBackground_mediumContrast"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:fontFamily="sans-serif"
+            android:textColor="@color/md_theme_onBackground_mediumContrast"
             android:textSize="24sp"
             tools:text="16/10/2025" />
 
