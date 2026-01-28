@@ -29,11 +29,31 @@ import java.util.Locale
 
 class MainScreenFragment : Fragment() {
 
+    // Constantes para guardar/restaurar estado del clima
+    companion object {
+        private const val KEY_WEATHER_LOADED = "weather_loaded"
+        private const val KEY_TODAY_TEMP = "today_temp"
+        private const val KEY_TODAY_DESCRIPTION = "today_description"
+        private const val KEY_TODAY_ICON = "today_icon"
+        private const val KEY_TOMORROW_TEMP = "tomorrow_temp"
+        private const val KEY_TOMORROW_DESCRIPTION = "tomorrow_description"
+        private const val KEY_TOMORROW_ICON = "tomorrow_icon"
+    }
+
     // Fragment-aren layout-aren binding objektua
     private lateinit var binding: FragmentMainScreenBinding
 
     // Eguraldiaren datuak kudeatzeko klasearen instantzia
     private lateinit var weather: Weather
+
+    // Variables para guardar el estado del clima
+    private var weatherLoaded = false
+    private var todayTemp: String? = null
+    private var todayDescription: String? = null
+    private var todayIcon: Int = 0
+    private var tomorrowTemp: String? = null
+    private var tomorrowDescription: String? = null
+    private var tomorrowIcon: Int = 0
 
     // GPS baimena eskatzeko erabiliko den kodea
     private val LOCATION_PERMISSION_REQUEST_CODE = 100
@@ -121,6 +141,9 @@ class MainScreenFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
+        // Eguneratu tema ikonoa (berrabiarazpenaren ondoren ere zuzen jartzeko)
+        updateThemeIcon()
+
         // Coroutine bat abiarazten dugu fragment bizi den bitartean (lifecycleScope)
         lifecycleScope.launch {
             var azkenEguraldiEguneratzea = 0L // Azken eguraldi eguneratzearen denbora (timestamp)
@@ -151,14 +174,40 @@ class MainScreenFragment : Fragment() {
         //tema aldatzeko
         binding.themeImg.setOnClickListener { changeTheme() }
 
+        // Ezarri hasierako ikonoa uneko temaren arabera
+        updateThemeIcon()
+
         // Weather klasearen instantzia sortu, eguraldiaren datuak lortzeko
         weather = Weather(requireContext())
+
+        // Restaurar el estado del clima si existe
+        savedInstanceState?.let {
+            weatherLoaded = it.getBoolean(KEY_WEATHER_LOADED, false)
+            if (weatherLoaded) {
+                todayTemp = it.getString(KEY_TODAY_TEMP)
+                todayDescription = it.getString(KEY_TODAY_DESCRIPTION)
+                todayIcon = it.getInt(KEY_TODAY_ICON, R.drawable.ic_error)
+                tomorrowTemp = it.getString(KEY_TOMORROW_TEMP)
+                tomorrowDescription = it.getString(KEY_TOMORROW_DESCRIPTION)
+                tomorrowIcon = it.getInt(KEY_TOMORROW_ICON, R.drawable.ic_error)
+
+                // Mostrar los datos guardados
+                binding.weatherCard.gaurTemperatureText.text = todayTemp
+                binding.weatherCard.gaurWeatherDescription.text = todayDescription
+                binding.weatherCard.gaurWeatherIcon.setImageResource(todayIcon)
+                binding.weatherCard.biharTemperatureText.text = tomorrowTemp
+                binding.weatherCard.biharWeatherDescription.text = tomorrowDescription
+                binding.weatherCard.biharWeatherIcon.setImageResource(tomorrowIcon)
+            }
+        }
 
         // ordua eta data kargatzeko / erakusteko
         showDateTime()
 
-        // GPSaren kokapena lortzen saiatuko gara
-        getLocation()
+        // GPSaren kokapena lortzen saiatuko gara (solo si no hay datos guardados)
+        if (!weatherLoaded) {
+            getLocation()
+        }
 
         // ea dagoen mediasession bat martxan notifikazio barran, adb spotify
         MyNotificationListener.onNotificationUpdate = {
@@ -339,22 +388,31 @@ class MainScreenFragment : Fragment() {
 
                     // Honek egiten duena da denbora errealean datuak eguneratu
                     activity?.runOnUiThread {
-                        binding.weatherCard.gaurTemperatureText.text = "$temp°C"
-                        binding.weatherCard.gaurWeatherDescription.text =
-                            info?.descriptionEus ?: condition
-                        info?.let { binding.weatherCard.gaurWeatherIcon.setImageResource(it.iconRes) }
+                        todayTemp = "$temp°C"
+                        todayDescription = info?.descriptionEus ?: condition
+                        todayIcon = info?.iconRes ?: R.drawable.ic_error
+
+                        binding.weatherCard.gaurTemperatureText.text = todayTemp
+                        binding.weatherCard.gaurWeatherDescription.text = todayDescription
+                        binding.weatherCard.gaurWeatherIcon.setImageResource(todayIcon)
                     }
 
                     // BIHAR: biharko iragarpena
                     val forecastTomorrow = result.forecast.forecastday[1].day
                     val tempTomorrow = forecastTomorrow.avgtemp_c
                     val conditionTomorrow = forecastTomorrow.condition.text
+                    val infoTomorrow = weatherMap[biharcode]
 
                     activity?.runOnUiThread {
-                        binding.weatherCard.biharTemperatureText.text = "$tempTomorrow°C"
-                        binding.weatherCard.biharWeatherDescription.text =
-                            info?.descriptionEus ?: conditionTomorrow
-                        info?.let { binding.weatherCard.biharWeatherIcon.setImageResource(it.iconRes) }
+                        tomorrowTemp = "$tempTomorrow°C"
+                        tomorrowDescription = infoTomorrow?.descriptionEus ?: conditionTomorrow
+                        tomorrowIcon = infoTomorrow?.iconRes ?: R.drawable.ic_error
+
+                        binding.weatherCard.biharTemperatureText.text = tomorrowTemp
+                        binding.weatherCard.biharWeatherDescription.text = tomorrowDescription
+                        binding.weatherCard.biharWeatherIcon.setImageResource(tomorrowIcon)
+
+                        weatherLoaded = true
                     }
 
                 } else {
@@ -388,22 +446,36 @@ class MainScreenFragment : Fragment() {
 
     //Aplikazioaren tema aldatzeko funtzioa
     private fun changeTheme() {
-        // Lortu telefonoaren tema sistemako konfiguraziotik
-        val currentNightMode =
-            resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK
+        // Aldatu tema (argia <-> iluna)
+        ThemeManager.toggleTheme(requireContext())
+        // Nota: Activity-a berrabiaraziko da automatikoki tema aldatzean
+    }
 
-        when (currentNightMode) {
-            android.content.res.Configuration.UI_MODE_NIGHT_YES -> {
-                // aldatu tema argira eta ikonoa aldatu
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                binding.themeImg.setImageResource(R.drawable.ic_dark)
-            }
-
-            else -> {
-                // aldatu tema ilunera eta ikonoa aldatu
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                binding.themeImg.setImageResource(R.drawable.ic_light)
-            }
+    /**
+     * Eguneratu tema ikonoa uneko temaren arabera
+     */
+    private fun updateThemeIcon() {
+        val isDarkMode = ThemeManager.isDarkModeActive()
+        if (isDarkMode) {
+            // Ilun moduan bagaude, erakutsi "argi" ikonoa (aldatzeko)
+            binding.themeImg.setImageResource(R.drawable.ic_light)
+        } else {
+            // Argi moduan bagaude, erakutsi "ilun" ikonoa (aldatzeko)
+            binding.themeImg.setImageResource(R.drawable.ic_dark)
+        }
+    }
+    // eguraldiaren datuak gordetzen ditugu, fragmentu hau berriro sortzen denean berreskuratu ahal izateko
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        // Guardar el estado del clima antes de que se destruya el fragment
+        outState.putBoolean(KEY_WEATHER_LOADED, weatherLoaded)
+        if (weatherLoaded) {
+            outState.putString(KEY_TODAY_TEMP, todayTemp)
+            outState.putString(KEY_TODAY_DESCRIPTION, todayDescription)
+            outState.putInt(KEY_TODAY_ICON, todayIcon)
+            outState.putString(KEY_TOMORROW_TEMP, tomorrowTemp)
+            outState.putString(KEY_TOMORROW_DESCRIPTION, tomorrowDescription)
+            outState.putInt(KEY_TOMORROW_ICON, tomorrowIcon)
         }
     }
 

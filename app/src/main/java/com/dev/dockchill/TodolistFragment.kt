@@ -303,5 +303,4 @@ class TodolistFragment : Fragment(), OnEginbeharraMoveListener {
         Toast.makeText(requireContext(), "Eginbeharra eguneratuta", Toast.LENGTH_SHORT).show()
         hideEditMenu()
     }
-
 }

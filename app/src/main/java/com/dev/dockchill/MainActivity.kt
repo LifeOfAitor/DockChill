@@ -14,6 +14,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Aplikatu gordetako tema hasiera batean, UI kargatu baino lehen
+        val savedTheme = ThemeManager.getSavedThemeMode(this)
+        ThemeManager.applyTheme(savedTheme)
+
         super.onCreate(savedInstanceState)
         // Ertzetaraino marrazteko gaitasuna aktibatu
         enableEdgeToEdge()

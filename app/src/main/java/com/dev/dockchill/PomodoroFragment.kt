@@ -20,6 +20,17 @@ class PomodoroFragment : Fragment() {
 
     private lateinit var binding: FragmentPomodoroBinding
 
+    // Constantes para guardar/restaurar estado del timer
+    companion object {
+        private const val KEY_TIMER_RUNNING = "timer_running"
+        private const val KEY_TIME_LEFT = "time_left"
+        private const val KEY_LENGTH_MINUTES = "length_minutes"
+        private const val KEY_REST_MINUTES = "rest_minutes"
+        private const val KEY_ROUNDS = "rounds"
+        private const val KEY_CURRENT_ROUND = "current_round"
+        private const val KEY_IS_WORK_SESSION = "is_work_session"
+    }
+
     // PomodoroViewModel-a Room databaseko ViewModelarekin lan egiteko, honek ahalbidetuko digu denbora errealean
     // datu baseari kontsultak egitea eta informazioa ikusi ahal izatea, estatistikak izango dira
     // guk begiratuko ditugun datuak
@@ -58,10 +69,30 @@ class PomodoroFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Restaurar estado guardado si existe
+        savedInstanceState?.let {
+            isTimerRunning = it.getBoolean(KEY_TIMER_RUNNING, false)
+            timeLeftInMillis = it.getLong(KEY_TIME_LEFT, 0L)
+            pomodoroLengthMinutes = it.getInt(KEY_LENGTH_MINUTES, 25)
+            pomodoroRestMinutes = it.getInt(KEY_REST_MINUTES, 5)
+            pomodoroRounds = it.getInt(KEY_ROUNDS, 4)
+            pomodoroCurrentRound = it.getInt(KEY_CURRENT_ROUND, 1)
+            isWorkSession = it.getBoolean(KEY_IS_WORK_SESSION, true)
+        }
+
         // Timerrari dagozkioten funtzioak martxan jartzeko
         setupStatisticsObservers()
         setupTimerButtons()
-        initializeTimer()
+
+        // Restaurar timer si estaba en ejecución
+        if (savedInstanceState != null) {
+            updateTimerDisplay()
+            if (isTimerRunning) {
+                startTimer()
+            }
+        } else {
+            initializeTimer()
+        }
 
         //menuak itxi pantaiako edozein puntutan click egitean
         binding.screen.setOnClickListener { hideMenus() }
@@ -231,14 +262,27 @@ class PomodoroFragment : Fragment() {
         // Pantailako elementuak eguneratzen ditugu eta ronda zenbakia erakusten dugu
         val durationMinutes = if (isWorkSession) pomodoroLengthMinutes else pomodoroRestMinutes
         timeLeftInMillis = durationMinutes * 60 * 1000L
+        updateTimerDisplay()
+    }
+
+    private fun updateTimerDisplay() {
+        // Actualizar la vista del timer sin reinicializar
         updateTimerText()
         updateCircularProgress()
         binding.roundText.text = "$pomodoroCurrentRound / $pomodoroRounds"
         if (isWorkSession){
             binding.txtEgoera.text = "LANEAN"
         }else{
-            binding.txtEgoera.text = "DESKANTSOA"
+            binding.txtEgoera.text = "ATSEDEN"
         }
+
+        // Actualizar seekbars
+        binding.seekBarIraupena.progress = pomodoroLengthMinutes
+        binding.valueIraupena.text = "$pomodoroLengthMinutes min"
+        binding.seekBarRest.progress = pomodoroRestMinutes
+        binding.valueRest.text = "$pomodoroRestMinutes min"
+        binding.seekBarRondak.progress = pomodoroRounds
+        binding.valueRondak.text = "$pomodoroRounds"
     }
 
     private fun startTimer() {
@@ -330,6 +374,18 @@ class PomodoroFragment : Fragment() {
         val totalMillis = durationMinutes * 60 * 1000L
         val progress = ((timeLeftInMillis.toFloat() / totalMillis.toFloat()) * 100).toInt()
         binding.circularProgressBar.progress = progress
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        // Guardar el estado del timer antes de que se destruya el fragment
+        outState.putBoolean(KEY_TIMER_RUNNING, isTimerRunning)
+        outState.putLong(KEY_TIME_LEFT, timeLeftInMillis)
+        outState.putInt(KEY_LENGTH_MINUTES, pomodoroLengthMinutes)
+        outState.putInt(KEY_REST_MINUTES, pomodoroRestMinutes)
+        outState.putInt(KEY_ROUNDS, pomodoroRounds)
+        outState.putInt(KEY_CURRENT_ROUND, pomodoroCurrentRound)
+        outState.putBoolean(KEY_IS_WORK_SESSION, isWorkSession)
     }
 
     override fun onDestroyView() {
