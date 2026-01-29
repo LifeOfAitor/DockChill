@@ -4,7 +4,17 @@ Android aplikazio bat, iPhone-en “Landscape Dock”-aren inspirazioz sortua.
 Mugikorra horizontalki jartzean funtzionatzen du, informazio erabilgarria erakusten du: ordua, eguraldia eta musika.  
 Gainera, ezkerreko panelean Pomodoro tenporizadore minimalista eta eskuineko panelean To-Do zerrenda sinple bat ditu.
 
----
+### Tema iluna
+![Pantaia nagusia](screenshots/dark_main.png)
+![Pomodoro](screenshots/dark_main_pomodoro.png)
+![Pomodoro konfigurazioa](screenshots/dark_pomodoro_settings.png)
+![To-Do](screenshots/dark_main_todos.png)
+![Pomodoro konfigurazioa](screenshots/dark_pomodoro_settings.png)
+
+### Tema Claro
+![Pantaia nagusia](screenshots/light_main.png)
+![Pomodoro - Claro](screenshots/light_pomodoro_main.png)
+![To-Do - Claro](screenshots/light_main_todos.png)
 
 ## Funtzionalitateak
 
