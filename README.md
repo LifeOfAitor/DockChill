@@ -11,10 +11,10 @@ Gainera, ezkerreko panelean Pomodoro tenporizadore minimalista eta eskuineko pan
 ![To-Do](app/src/main/res/screenshots/dark_main_todos.png)
 ![Pomodoro konfigurazioa](app/src/main/res/screenshots/dark_pomodoro_settings.png)
 
-### Tema Claro
+### Tema argia
 ![Pantaia nagusia](app/src/main/res/screenshots/light_main.png)
-![Pomodoro - Claro](app/src/main/res/screenshots/light_pomodoro_main.png)
-![To-Do - Claro](app/src/main/res/screenshots/light_main_todos.png)
+![Pomodoro](app/src/main/res/screenshots/light_pomodoro_main.png)
+![To-Do](app/src/main/res/screenshots/light_main_todos.png)
 
 ## Funtzionalitateak
 
