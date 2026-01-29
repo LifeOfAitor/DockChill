@@ -8,7 +8,7 @@ Gainera, ezkerreko panelean Pomodoro tenporizadore minimalista eta eskuineko pan
 
 ## Funtzionalitateak
 
-### 🏠 Hasierako pantaila
+### Hasierako pantaila
 - **Ordularia**: ordua denbora errealean eguneratzen da.
 - **Eguraldia**: zure kokapena erabiliz OpenWeatherMap API-tik datuak jasotzen ditu.
 - **Mugikorraren musika**: mugikorrean Spotify bezalako aplikazioak kontrolatzea, kontrol-botoiekin.
@@ -40,7 +40,7 @@ Gainera, ezkerreko panelean Pomodoro tenporizadore minimalista eta eskuineko pan
 
 ---
 
-## 📱 Funtzionamendua
+## Funtzionamendua
 
 1. Aplikazioa horizontalki irekitzen da, horrela dago diseinatuta.
 2. Aplikazioa automatikoki "dock" moduan aktibatzen da.
@@ -50,13 +50,13 @@ Gainera, ezkerreko panelean Pomodoro tenporizadore minimalista eta eskuineko pan
 
 ---
 
-## 🧑‍💻 Egilea
+## Egilea
 
 **Aitor Gaillard**
 
 Proiektu hau ikasketa- eta esperimentazio-helburuetarako sortua da, Android garapena eta Kotlin praktikan jartzeko.
 
-## 🌐 Baliabideak
+## Baliabideak
 
 - [Weather Icons](https://github.com/Makin-Things/weather-icons)
 - [WeatherAPI](https://www.weatherapi.com/)
@@ -119,7 +119,7 @@ Proiektu hau ikasketa- eta esperimentazio-helburuetarako sortua da, Android gara
 
 ---
 
-## 📄 Lizentzia
+## Lizentzia
 
 MIT Lizentzia  
 © 2025 Aitor Gaillard
