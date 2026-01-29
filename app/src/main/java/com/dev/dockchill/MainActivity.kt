@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.dev.dockchill.databinding.ActivityMainBinding
 
+// MainActivity klasea, aplikazioaren sarrera puntua, hemen fragmentak kudeatzen dira ViewPager2 erabiliz
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 

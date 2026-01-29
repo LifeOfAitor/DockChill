@@ -108,6 +108,7 @@ class PomodoroViewModel(private val repository: PomodoroRepository) : ViewModel(
     }
 }
 
+// ViewModelFactory klasea ViewModel-a sortzeko erabiliko dugu
 class PomodoroViewModelFactory(private val repository: PomodoroRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(PomodoroViewModel::class.java)) {

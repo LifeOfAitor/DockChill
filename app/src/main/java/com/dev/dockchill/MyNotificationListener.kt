@@ -12,6 +12,9 @@ import android.util.Log
  *  - MediaSession aldatu denean
  *
  * Gure Fragment-ari callback bat bidaltzen dio, updateMediaController() berriz exekutatzeko.
+ *
+ * NOTA: Zerbitzu hau AndroidManifest.xml-n erregistratu behar da. Baita ere, spotify ezin daiteke
+ * kontrolatu erabiltzaileak aplikazioari notifikazioak irakurtzeko baimena eman ezean.
  */
 class MyNotificationListener : NotificationListenerService() {
 

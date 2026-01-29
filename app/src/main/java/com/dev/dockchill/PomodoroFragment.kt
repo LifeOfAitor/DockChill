@@ -234,9 +234,9 @@ class PomodoroFragment : Fragment() {
         updateTimerText()
         updateCircularProgress()
         binding.roundText.text = "$pomodoroCurrentRound / $pomodoroRounds"
-        if (isWorkSession){
+        if (isWorkSession) {
             binding.txtEgoera.text = "LANEAN"
-        }else{
+        } else {
             binding.txtEgoera.text = "DESKANTSOA"
         }
     }
@@ -259,7 +259,7 @@ class PomodoroFragment : Fragment() {
                     // gorde datuak datubasean
                     viewModel.addCompletedPomodoro(pomodoroLengthMinutes)
 
-                    // "deskantso" modura aldatu"
+                    // "deskantso" modura aldatu
                     isWorkSession = false
 
                     // prestatu deskantsorako denbora
@@ -332,6 +332,7 @@ class PomodoroFragment : Fragment() {
         binding.circularProgressBar.progress = progress
     }
 
+    // Fragmentuaren view "puskatzen" denean, timerra gelditu egiten dugu baliabideak askatzeko
     override fun onDestroyView() {
         super.onDestroyView()
         countDownTimer?.cancel()

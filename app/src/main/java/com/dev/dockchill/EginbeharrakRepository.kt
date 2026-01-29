@@ -4,7 +4,8 @@ import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.IOException
-//hainbat activity erabiliko dituzten funtzioak hemen gordetzea ideia ona da
+//hainbat activity erabiliko dituzten funtzioak hemen gordetzea ideia ona da, modu honetan klaseak
+// ez dira luzatzen eta kodea berrerabiltzeko aukera dago
 class EginbeharrakRepository(private val context: Context) {
 
     private val gson = Gson()

@@ -11,7 +11,7 @@ import com.dev.dockchill.databinding.ItemTodoBinding
 
 class EginbeharrakAdapter(
     private val eginbeharrak: MutableList<Eginbeharra>, // Zerrenda mutagarria, elementuak kendu edo mugitzeko
-    private val onEginbeharraClick: (Eginbeharra, Int) -> Unit, // Checkbox-a klik egitean deitzen den lambda (eginbeharra eta posicioa)
+    private val onEginbeharraClick: (Eginbeharra, Int) -> Unit, // Checkbox-a klik egitean deitzen den lambda (eginbeharra eta posizioa)
     private val onEginbeharraItemClick: (Eginbeharra, Int) -> Unit, // Izenburua eta deskripzioa click egitean (eta posizioa)
     private val moveListener: OnEginbeharraMoveListener // "Gora" eta "Behera" botoientzako listener
 ) : RecyclerView.Adapter<EginbeharrakAdapter.EginbeharraViewHolder>() {

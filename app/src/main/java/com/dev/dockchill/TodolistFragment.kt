@@ -11,6 +11,11 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dev.dockchill.databinding.FragmentTodoListBinding
 
+// Eginbeharrak kudeatzeko fragment-a. Eginbeharrak gehitu, editatu, ezabatu eta berrantolatu ahal izango dira hemen
+// EginbeharrakRepository erabiliko da datuak fitxategi batean gordetzeko eta kargatzeko
+// EginbeharrakAdapter erabiliko da RecyclerView-an eginbeharrak erakusteko
+// OnEginbeharraMoveListener interfazeak eginbeharrak gora eta behera mugitzeko metodoak definitzen ditu
+// Eginbeharrak "assets" karpetan "eginbeharrak.json" fitxategian gordeko dira JSON formatuan
 class TodolistFragment : Fragment(), OnEginbeharraMoveListener {
     private lateinit var binding: FragmentTodoListBinding
     private lateinit var repository: EginbeharrakRepository
@@ -62,7 +67,7 @@ class TodolistFragment : Fragment(), OnEginbeharraMoveListener {
         binding.viewLista.layoutManager = LinearLayoutManager(this.requireContext())
         binding.viewLista.adapter = adapter
 
-        //menuak itxi pantaiako edozein puntutan click egitean
+        //menuak itxi pantaiako edozein puntutan "click" egitean
         binding.screen.setOnClickListener {
             hideMenu()
             hideEditMenu()
@@ -230,7 +235,7 @@ class TodolistFragment : Fragment(), OnEginbeharraMoveListener {
 
     // Abrir el panel de edición
     private fun showEditMenu(eginbeharra: Eginbeharra, position: Int) {
-        // Cerrar menú de crear si está abierto
+        // Itxi sortzeko menua irekita badago
         if (binding.menuBerria.isVisible) {
             hideMenu()
         }
