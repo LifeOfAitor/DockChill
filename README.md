@@ -4,17 +4,22 @@ Android aplikazio bat, iPhone-en “Landscape Dock”-aren inspirazioz sortua.
 Mugikorra horizontalki jartzean funtzionatzen du, informazio erabilgarria erakusten du: ordua, eguraldia eta musika.  
 Gainera, ezkerreko panelean Pomodoro tenporizadore minimalista eta eskuineko panelean To-Do zerrenda sinple bat ditu.
 
+
 ### Tema iluna
-![Pantaia nagusia](app/src/main/res/screenshots/dark_main.png)
-![Pomodoro](app/src/main/res/screenshots/dark_main_pomodoro.png)
-![Pomodoro konfigurazioa](app/src/main/res/screenshots/dark_pomodoro_settings.png)
-![To-Do](app/src/main/res/screenshots/dark_main_todos.png)
-![Pomodoro konfigurazioa](app/src/main/res/screenshots/dark_pomodoro_settings.png)
+<img src="app/src/main/res/screenshots/dark_main.png" alt="Pantaia nagusia" style="border: 3px solid #333; border-radius: 8px; padding: 5px; display: block;">
+
+<img src="app/src/main/res/screenshots/dark_main_pomodoro.png" alt="Pomodoro" style="border: 3px solid #333; border-radius: 8px; padding: 5px; display: block;">
+
+<img src="app/src/main/res/screenshots/dark_pomodoro_settings.png" alt="Pomodoro konfigurazioa" style="border: 3px solid #333; border-radius: 8px; padding: 5px; display: block;">
+
+<img src="app/src/main/res/screenshots/dark_main_todos.png" alt="To-Do" style="border: 3px solid #333; border-radius: 8px; padding: 5px; display: block;">
 
 ### Tema argia
-![Pantaia nagusia](app/src/main/res/screenshots/light_main.png)
-![Pomodoro](app/src/main/res/screenshots/light_pomodoro_main.png)
-![To-Do](app/src/main/res/screenshots/light_main_todos.png)
+<img src="app/src/main/res/screenshots/light_main.png" alt="Pantaia nagusia" style="border: 3px solid #333; border-radius: 8px; padding: 5px; display: block;">
+
+<img src="app/src/main/res/screenshots/light_pomodoro_main.png" alt="Pomodoro" style="border: 3px solid #333; border-radius: 8px; padding: 5px; display: block;">
+
+<img src="app/src/main/res/screenshots/light_main_todos.png" alt="To-Do" style="border: 3px solid #333; border-radius: 8px; padding: 5px; display: block;">
 
 ## Funtzionalitateak
 
