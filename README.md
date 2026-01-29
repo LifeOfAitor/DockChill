@@ -1,28 +1,29 @@
 # DockChill
 
 Android aplikazio bat, iPhone-en “Landscape Dock”-aren inspirazioz sortua.  
-Mugikorra horizontalki jartzean, informazio erabilgarria erakusten du: ordua, eguraldia eta erlaxazio-soinuak.  
+Mugikorra horizontalki jartzean funtzionatzen du, informazio erabilgarria erakusten du: ordua, eguraldia eta musika.  
 Gainera, ezkerreko panelean Pomodoro tenporizadore minimalista eta eskuineko panelean To-Do zerrenda sinple bat ditu.
 
 ---
 
-## 🧭 Funtzionalitateak
+## Funtzionalitateak
 
 ### 🏠 Hasierako pantaila
 - **Ordularia**: ordua denbora errealean eguneratzen da.
 - **Eguraldia**: zure kokapena erabiliz OpenWeatherMap API-tik datuak jasotzen ditu.
-- **Erlaxazio-soinuak**: euriaren, haizearen edo basoaren soinuen erreprodukzioa, kontrol-botoiekin.
+- **Mugikorraren musika**: mugikorrean Spotify bezalako aplikazioak kontrolatzea, kontrol-botoiekin.
 
-### ⏲️ Ezkerreko panela
+### Ezkerreko panela
 - **Pomodoro Timer**: lan- eta atseden-denborak kudeatzeko tenporizadore sinplea.
+- **Pomodoro Estatistikak**: lan-ikasketa saioak gordetzen dira estatistikak erakusteko. ROOM datu-basea erabiltzen du horretarako.
 
-### ✅ Eskuineko panela
+### Eskuineko panela
 - **Zeregin-zerrenda (To-Do)**: zereginak sortu, markatu eta ezabatzeko aukera.
 - Datuak lokalki gordetzen dira (Room edo SharedPreferences bidez).
 
 ---
 
-## ⚙️ Teknologiak
+## Teknologiak
 
 - **Kotlin**
 - **XML Layouts**
@@ -32,24 +33,20 @@ Gainera, ezkerreko panelean Pomodoro tenporizadore minimalista eta eskuineko pan
 - **MediaPlayer**
 - **RecyclerView**
 - **Room Database**
+- **SharedPreferences**
+- **Material Design Komponentak**
+- **MVVM Arkitektura**
+- **LiveData eta ViewModel**
 
 ---
 
 ## 📱 Funtzionamendua
 
-1. Mugikorra horizontalki jarri.
+1. Aplikazioa horizontalki irekitzen da, horrela dago diseinatuta.
 2. Aplikazioa automatikoki "dock" moduan aktibatzen da.
-3. Pantaila nagusian ordua, eguraldia eta soinuak ikusiko dituzu.
+3. Pantaila nagusian ordua, eguraldia eta musika ikusiko dituzu.
 4. Ezkerreko edo eskuineko pantailara mugitu Pomodoro edo To-Do zerrendara sartzeko.
 
----
-
-## 🧩 Etorkizuneko hobekuntzak
-
-- Itxura pertsonalizagarria (koloreak eta tema iluna)
-- Widget-a pantaila nagusirako
-- Estatistika txikiak Pomodoro saioetan
-- Sinkronizazioa hodeian
 
 ---
 
